@@ -1,4 +1,14 @@
 const router = require('express').Router();
+const {
+  getThoughts,
+  getSingleThought,
+  addThought,
+  updateThought,
+  deleteThought,
+  addReaction,
+  deleteReaction
+} = require('../../controllers/thoughtController');
+
 
 // ('/') route to get all thoughts, get single thought by _id, add a new thought and push thought's _id to associated user's thoughts array, update thought by _id, delete thought by _id
 router.route('/')
