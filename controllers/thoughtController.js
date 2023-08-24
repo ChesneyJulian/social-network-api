@@ -11,8 +11,8 @@ const getThoughts = async function (req, res) {
 
 const getSingleThought = async function (req, res) {
   try {
-    const thought = await Thought.findOne({ _id: req.body.id })
-      .populate('user')
+    const thought = await Thought.findOne({ _id: req.params.id })
+      // .populate('user')
       .select('-__v');
 
       if (!thought) {
@@ -44,7 +44,7 @@ const addThought = async function (req, res) {
 const updateThought = async function (req, res) {
   try {
     const updatedThoughtData = await Thought.findOneAndUpdate(
-      { _id: req.body.id },
+      { _id: req.params.id },
       { $set: req.body },
       { runValidators: true, new: true}
     );
@@ -61,10 +61,10 @@ const updateThought = async function (req, res) {
 
 const deleteThought = async function (req, res) {
   try {
-    const deletedThoughtData = await Thought.findOneAndRemove({ _id: req.body.id });
+    const deletedThoughtData = await Thought.findOneAndRemove({ _id: req.params.id });
     const userData = await User.findOneAndUpdate(
-      { _id: req.body.userId },
-      { $pull: { thought: deletedThoughtData._id }},
+      { username: deletedThoughtData.username },
+      { $pull: { thoughts: deletedThoughtData._id }},
       { new: true }
     );
 
@@ -101,14 +101,14 @@ const deleteReaction = async function (req, res) {
   try {
     const thoughtData = await Thought.findOneAndUpdate(
       {_id: req.params.thoughtId},
-      { $pull: {reactions: req.body.reactionId}},
+      { $pull: {reactions: {reactionId: req.params.reactionId}}},
       { runValidators: true, new: true }
     );
     if (!thoughtData) {
       return res.status(404).json({ message: 'No thought found by that ID' });
     };
 
-    res.json(thoughtData);
+    res.json('reaction deleted');
   } catch (err) {
     res.status(500).json(err);
   }
