@@ -11,9 +11,9 @@ const getUsers = async function (req, res) {
 
 const getSingleUser = async function (req, res) {
   try {
-    const user = await User.findOne({ _id: req.body.id })
-      .populate('thought')
-      .populate('user')
+    const user = await User.findOne({ _id: req.params.id})
+      // .populate('thought')
+      // .populate('user')
       .select('-__v');
 
       if (!user) {
@@ -38,7 +38,7 @@ const addUser = async function (req, res) {
 const updateUser = async function (req, res) {
   try {
     const updatedUserData = await User.findOneAndUpdate(
-      { _id: req.body.id },
+      { _id: req.params.id },
       { $set: req.body },
       { runValidators: true, new: true }
     );
@@ -55,7 +55,7 @@ const updateUser = async function (req, res) {
 
 const deleteUser = async function (req, res) {
   try {
-    const deletedUserData = await User.findOneAndRemove({ _id: req.body.id })
+    const deletedUserData = await User.findOneAndRemove({ _id: req.params.id })
 
     if(!deletedUserData) {
       return res.status(404).json({ message: 'No user found with that ID' })

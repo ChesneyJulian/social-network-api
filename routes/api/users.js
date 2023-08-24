@@ -9,11 +9,14 @@ const {
   deleteFriend
 } = require('../../controllers/userController');
 
-// ('/') route to get a new user, get single user by _id with populated thought and friend data, post new user, update user by _id, delete user and associated thoughts by _id
+// ('/') route to get a new user, post new user
 router.route('/')
   .get(getUsers)
+  .post(addUser) 
+
+//('/:id') route get single user by _id with populated thought and friend data, update user by _id, delete user and associated thoughts by _id
+router.route('/:id')
   .get(getSingleUser)
-  .post(addUser)
   .put(updateUser)
   .delete(deleteUser);
 
