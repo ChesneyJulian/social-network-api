@@ -1,9 +1,7 @@
 // helper function to format date
-// function formatDate (date) {
-//   const day = date.getDate();
-//   const month = date.getMonth() + 1;
-//   const year = date.getFullYear();
-//   return `${month}/${day}/${year}`
-// };
+function formatDate (date) {
+  const formatted = date.toLocaleDateString('en-us');
+  return formatted;
+};
 
-// module.exports = { formatDate }
+module.exports = { formatDate }

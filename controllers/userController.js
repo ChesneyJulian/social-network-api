@@ -12,8 +12,8 @@ const getUsers = async function (req, res) {
 const getSingleUser = async function (req, res) {
   try {
     const user = await User.findOne({ _id: req.params.id})
-      // .populate('thought')
-      // .populate('user')
+      .populate('thoughts')
+      .populate('friends')
       .select('-__v');
 
       if (!user) {
@@ -58,13 +58,15 @@ const deleteUser = async function (req, res) {
     const deletedUserData = await User.findOneAndRemove({ _id: req.params.id })
 
     if(!deletedUserData) {
-      return res.status(404).json({ message: 'No user found with that ID' })
+      return res.status(404).json({ message: 'No user found with that ID' });
     };
     // ADD FUNCTIONALITY TO REMOVE ASSOCIATED THOUGHTS
-    // const thoughts = await Thought.find(
-    //   {}
-    // )
-    res.json({ message: 'User successfully deleted' });
+    const thoughts = await Thought.deleteMany({ username: deletedUserData.username });
+    if(!thoughts) {
+      return res.status(206).json({ message: 'User deleted but no thoughts found'});
+    }
+
+    res.json({ message: 'User and user\'s thoughts successfully deleted' });
   } catch (err) {
     res.status(500).json(err);
   };
